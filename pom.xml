@@ -9,14 +9,6 @@
     <packaging>jar</packaging>
     <description>Demo project showing how to use compute the intersection of two sets</description>
 
-    <!--pluginRepositories>
-        <pluginRepository>
-            <id>kotlin-eap</id>
-            <url>https://dl.bintray.com/kotlin/kotlin-eap/</url>
-        </pluginRepository>
-    </pluginRepositories-->
-
-
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -57,11 +49,6 @@
         </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mustache</artifactId>
-            <version>${spring-boot.version}</version>            
-        </dependency-->        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
@@ -71,7 +58,7 @@
                     <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>        
+        </dependency-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -119,6 +106,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.srcdir}</sourceDirectory>
+        <testSourceDirectory>${project.testsrcdir}</testSourceDirectory>
         <plugins>
             <plugin>
               <groupId>org.springframework.boot</groupId>
@@ -129,6 +118,8 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+                <!-- We are not sure if we're compile java source or not, assuming not then the following is the short hand of executions configured for compile, test-compile, kapt and test-kapt -->
+                <!--extensions>true</extensions-->
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -137,8 +128,7 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <sourceDir>${project.srcdir}</sourceDir>
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                             <args>
@@ -153,8 +143,7 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
+                                <sourceDir>${project.testsrcdir}</sourceDir>
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                         </configuration>
@@ -181,6 +170,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -247,16 +237,22 @@
     </build>
 
     <properties>
-        <kotlin.version>1.9.10</kotlin.version>   
+        <kotlin.version>1.9.20</kotlin.version>   
         <java.version>20</java.version> 
         <spring-boot.version>3.1.5</spring-boot.version>
-        <r2dbc.version>1.0.0.RELEASE</r2dbc.version>
+        <!--r2dbc.version>1.0.0.RELEASE</r2dbc.version>
         <r2dbc-spi.version>1.0.0.RELEASE</r2dbc-spi.version>
-        <h2-r2dbc.version>1.0.0.RELEASE</h2-r2dbc.version>
+        <h2-r2dbc.version>1.0.0.RELEASE</h2-r2dbc.version-->
         <mockito.version>3.1.0</mockito.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>    
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>    
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>                
+        <!--exec-maven-plugin.version>1.6.0</exec-maven-plugin.version-->
+        <!-- incremental compile is experimental-->
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <!-- Assuming the project contains kotlin source only-->
+        <project.srcdir>${project.basedir}/src/main/kotlin</project.srcdir>
+        <project.testsrcdir>${project.basedir}/src/test/kotlin</project.testsrcdir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
 </project>
