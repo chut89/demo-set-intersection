@@ -19,3 +19,6 @@ mvn spring-boot:run
 ```
 If your machine has Apache Maven with other version than 3.9.5, there's no problem. You can overcome with Maven wrapper, the idea is borrowed from Gradle: detail in https://maven.apache.org/wrapper/
 
+### OpenAPI documentation ###
+OpenAPI definition can be found locally at http://localhost:8080/swagger-ui.html
+
