@@ -1,0 +1,5 @@
+curl -v -H "Content-Type: application/json" -H "Accept: application/json" --data '{"firstCollection": [1,2], "secondCollection": [3,4]}' "http://localhost:8080/api/setintersection/complex"
+curl -v --data "firstList=1,2" --data "secondList=3,4" "http://localhost:8080/api/setintersection/"
+
+curl -v "http://localhost:8080/api/setintersection/simple?firstCollection=1&firstCollection=2&secondCollection=3&secondCollection=4"
+curl -v "http://localhost:8080/api/setintersection/simple?firstCollection=1,2&secondCollection=3,4,1,2,1,2"
