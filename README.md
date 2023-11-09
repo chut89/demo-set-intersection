@@ -13,12 +13,18 @@ Demo project implemented using Spring-boot, Kotlin as backend and React, Typescr
 ```shellscript
 sudo apt-get -y install git
 ```	
+### Clone backend repository
+```
+git clone https://github.com/chut89/demo-set-intersection
+```
 ### Build and run backend ###
+cd to project directory
 ```shellscript
+cd demo-set-intersection/
 mvn spring-boot:run
 ```
 If your machine has Apache Maven with other version than 3.9.5, there's no problem. You can overcome with Maven wrapper, the idea is borrowed from Gradle: detail in https://maven.apache.org/wrapper/
 
 ### OpenAPI documentation ###
-OpenAPI definition can be found locally at http://localhost:8080/swagger-ui.html
+OpenAPI definition can be found locally at http://localhost:8080/swagger-ui.html after backend has been built and started
 
