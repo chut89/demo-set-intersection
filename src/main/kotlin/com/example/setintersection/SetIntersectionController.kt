@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,20 +33,26 @@ class SetIntersectionController(private val setIntersectionService: SetIntersect
           ApiResponse(responseCode = "400", description = "Bad request, check for example encoding, escape of the two sets as parameters"),
       ]
     )
-    @PostMapping("/complex", consumes = ["application/json"])
+    @PostMapping("/complex", consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     //@ResponseBody
     fun setIntersection(
-            @RequestBody 
+            /*@RequestBody 
+            
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                 description = "Two sets in form of kotlin Pair",
                 content = [Content(
-                  mediaType = "application/json",
+                  mediaType = "application/x-www-form-urlencoded",
                   schema = Schema(implementation = Pair::class, example="Pair([1, 2, 3], [2, 3, 4])"),
                 )]            
-            )
-            pairOfSets: Pair<List<Int>, List<Int> >): Pair<Set<Int>, String> {
-        val (firstCollection, secondCollection) = pairOfSets
-        return setIntersectionService.computeIntersection(firstCollection, secondCollection)
+            )*/
+            pairOfSets: PostMappingParameters): ResponseEntity<Pair<Set<Int>, String> > {
+        val firstCollection = pairOfSets.first
+        val secondCollection = pairOfSets.second
+        
+        if (firstCollection == null || secondCollection == null) {
+            return ResponseEntity.badRequest().build()
+        }
+        return ResponseEntity(setIntersectionService.computeIntersection(firstCollection, secondCollection), HttpStatus.OK)
     }
     
     @Operation(summary = "Computes intersection of two sets when they are small in size where the URI does not exceeds 8kB (2048 characters)", description = "Returns matching elements of the two sets")    
@@ -55,11 +65,11 @@ class SetIntersectionController(private val setIntersectionService: SetIntersect
           ApiResponse(responseCode = "400", description = "Bad request, check for example encoding, escape of the two sets as parameters"),
       ]
     )
-    @GetMapping("/simple")
+    @GetMapping("/simple", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun setIntersectionDefault(
             @RequestParam firstCollection: List<Int>, 
-            @RequestParam secondCollection: List<Int>): Pair<Set<Int>, String> {
-        return setIntersectionService.computeIntersection(firstCollection, secondCollection)
+            @RequestParam secondCollection: List<Int>): ResponseEntity<Pair<Set<Int>, String> > {
+        return ResponseEntity(setIntersectionService.computeIntersection(firstCollection, secondCollection), HttpStatus.OK)
     }
     
 }
