@@ -11,19 +11,20 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class SetIntersectionService {
     private val logger = KotlinLogging.logger {}
     
-    fun computeIntersection(first: List<Int>, second: List<Int>): Pair<Set<Int>, String> {
+    fun computeIntersection(firstList: List<Int>, secondList: List<Int>): Pair<Set<Int>, String> {
         logger.info{"Computation starts!"}
         //if (first.isNotEmpty() && first is java.util.Set<*> && first is kotlin.collections.Set<*>) 
         //    return setOf(5,4,3,2,1)
         //val innerSet: Set<Int> = if (first.size <= second.size) first else second
         //val outerSet: Set<Int> = if (first.size <= second.size) second else first
+        val secondSet = secondList.toHashSet()
         
         val timeSource = TimeSource.Monotonic
         val markBefore = timeSource.markNow()
         
         var result: Set<Int> = emptySet()
-        for (candidate in first.toSet()) {
-            if (second.contains(candidate)) {
+        for (candidate in firstList.toSet()) {
+            if (secondSet.contains(candidate)) {
                 result += candidate
             }
 
