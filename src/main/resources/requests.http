@@ -1,4 +1,15 @@
-curl -v -H "Content-Type: application/json" -H "Accept: application/json" --data '{"first": [1,2,3,4], "second": [3,4]}' "http://localhost:8080/api/setintersection/complex"
+curl -v -u user:password --cookie "XSRF-TOKEN=a460f9f5-1772-4ceb-8eb5-8ed4ac03bdf5; Path=/api/setintersection/complex;JSESSIONID=C22DAFF702462CD6188D3DB28C0661B5;HttpOnly" -H "Content-Type: application/json" -H "Accept: application/json" --data '{"first": [1,2,3,4], "second": [3,4]}' "http://localhost:8080/api/setintersection/complex"
 
-curl -v "http://localhost:8080/api/setintersection/simple?firstCollection=1&firstCollection=2&secondCollection=3&secondCollection=4"
-curl -v "http://localhost:8080/api/setintersection/simple?firstCollection=1,2,3,4&secondCollection=3,4"
+curl -v -u user:password \
+-H "X-XSRF-TOKEN: 4ded6adc-17b3-4324-bacc-bf34f50e54f7" \
+--cookie "JSESSIONID=A7F702DE5C1B35E1A2F38182DBF490FE;XSRF-TOKEN=4ded6adc-17b3-4324-bacc-bf34f50e54f7" \
+-H "Content-Type: application/json" -H "Accept: application/json" --data '{"first": [1,2,3,4], "second": [3,4]}' \
+"http://localhost:8080/api/setintersection/complex"
+
+curl -v -X POST \
+--cookie "XSRF-TOKEN=ce8a96df-6da4-41d4-aa06-4160072a9c87; Path=/" \
+-H "X-XSRF-TOKEN: ce8a96df-6da4-41d4-aa06-4160072a9c87" \
+http://localhost:8080/logout
+
+curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1&firstCollection=2&secondCollection=3&secondCollection=4"
+curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1,2,3,4&secondCollection=3,4"

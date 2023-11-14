@@ -1,4 +1,4 @@
-package com.example.setintersection
+package com.example
 
 import org.springframework.boot.autoconfigure.SpringBootApplication	
 import org.springframework.boot.SpringApplication

@@ -39,7 +39,8 @@
         </dependency>                    
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <!-- TODO: spring-boot-starter-webflux is not compatible with jakarta EE version 9 which makes jakarta.servlet.Filter not available-->
+            <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>        
         <!--dependency>
@@ -68,6 +69,11 @@
             <groupId>io.github.oshai</groupId>
             <artifactId>kotlin-logging-jvm</artifactId>
             <version>5.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring-boot.version}</version>            
         </dependency>        
         <!--dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
