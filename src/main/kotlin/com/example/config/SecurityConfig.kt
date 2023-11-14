@@ -13,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.web.server.SecurityWebFilterChain
 //import org.springframework.security.web.csrf.CookieCsrfTokenRepository
-
+/*
+    Important: For spring to be able to scan and find the beans, this Configuration class must be nested in a subfolder to DemoSetIntersectionApplication.kt
+*/
 @Configuration
 @EnableWebFluxSecurity
 class SecurityConfig {
