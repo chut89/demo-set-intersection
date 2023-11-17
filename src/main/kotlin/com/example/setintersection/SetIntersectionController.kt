@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody
 @RequestMapping("/api/setintersection")
 class SetIntersectionController(private val setIntersectionService: SetIntersectionService) {
 
-    @Operation(summary = "Computes intersection of two sets when they are so large that must be put into request body", description = "Returns matching elements of the two sets")
+    @Operation(operationId = "setIntersectionPost", summary = "Computes intersection of two sets when they are so large that must be put into request body", description = "Returns matching elements of the two sets", tags = ["Set Intersection"])
     @ApiResponses(
       value = [
           ApiResponse(responseCode = "200", description = "Successful computation", content = [Content(
@@ -46,13 +46,13 @@ class SetIntersectionController(private val setIntersectionService: SetIntersect
             pairOfSets: Pair<List<Int>, List<Int> >): ResponseEntity<Pair<Set<Int>, String> > {
         val (firstCollection, secondCollection) = pairOfSets
         
-        if (firstCollection == null || secondCollection == null) {
+        if (firstCollection.isEmpty() || secondCollection.isEmpty()) {
             return ResponseEntity.badRequest().build()
         }
         return ResponseEntity(setIntersectionService.computeIntersection(firstCollection, secondCollection), HttpStatus.OK)
     }
     
-    @Operation(summary = "Computes intersection of two sets when they are small in size where the URI does not exceeds 8kB (2048 characters)", description = "Returns matching elements of the two sets")    
+    @Operation(operationId = "setIntersectionGet", summary = "Computes intersection of two sets when they are small in size where the URI does not exceeds 8kB (2048 characters)", description = "Returns matching elements of the two sets", tags = ["Set Intersection"])    
     @ApiResponses(
       value = [
           ApiResponse(responseCode = "200", description = "Successful computation", content = [Content(

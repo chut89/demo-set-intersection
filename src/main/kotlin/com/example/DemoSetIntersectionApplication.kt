@@ -3,11 +3,15 @@ package com.example
 import org.springframework.boot.autoconfigure.SpringBootApplication	
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.Banner
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.example.setintersection.GreetingClient
 
+import com.example.config.SpringdocProperties
+
 @SpringBootApplication
+@EnableConfigurationProperties(SpringdocProperties::class)
 class DemoSetIntersectionApplication
 
 fun main(args: Array<String>) {
