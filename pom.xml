@@ -74,20 +74,32 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot.version}</version>            
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>${kotlinx-coroutines.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-reactor</artifactId>
+            <version>${kotlinx-coroutines.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.6.0</version>
+        </dependency>        
+        <!--dependency>
+            <groupId>io.projectreactor.kotlin</groupId>
+            <artifactId>reactor-kotlin-extensions</artifactId>
+            <version>1.2.2</version>
+        </dependency>        
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
-        </dependency-->
-        <!--dependency>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
             <version>2.2.0</version>
@@ -244,7 +256,8 @@
     </build>
 
     <properties>
-        <kotlin.version>1.9.20</kotlin.version>   
+        <kotlin.version>1.9.20</kotlin.version>
+        <kotlinx-coroutines.version>1.7.3</kotlinx-coroutines.version>
         <java.version>20</java.version> 
         <spring-boot.version>3.1.5</spring-boot.version>
         <!--r2dbc.version>1.0.0.RELEASE</r2dbc.version>

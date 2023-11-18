@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
+
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.bodyValueAndAwait
 
 import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.RouterFunctions
@@ -19,7 +21,7 @@ import org.springframework.web.reactive.function.server.RequestPredicates.accept
 
 import org.springframework.web.reactive.function.client.WebClient
 
-//import org.springframework.web.reactive.function.server.coRouter
+import org.springframework.web.reactive.function.server.coRouter
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,17 +67,17 @@ class Employee {
 @Component
 class GreetingHandler {
 
-  fun hello(request: ServerRequest): Mono<ServerResponse> {
+  suspend fun hello(request: ServerRequest): ServerResponse {
     return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(Greeting("Hello from reactive REST end point"))
+        .bodyValueAndAwait(Greeting("Hello from reactive REST end point"))
   }
 }
 
 @Component
 class EmployeeHandler {
-  fun findEmployeeById(request: ServerRequest): Mono<ServerResponse> {
+  suspend fun findEmployeeById(request: ServerRequest): ServerResponse {
     return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(Employee("112233", "John Doe"))
+        .bodyValueAndAwait(Employee("112233", "John Doe"))
   }
 }
 
@@ -97,13 +99,9 @@ class GreetingRouter {
                     ]
     ))
   )
-  fun route(greetingHandler: GreetingHandler, employeeHandler: EmployeeHandler): RouterFunction<ServerResponse> {
-
-    return RouterFunctions
-      .route()
-        .GET("/employee/{id}", accept(MediaType.APPLICATION_JSON), employeeHandler::findEmployeeById)
-        .GET("/hello", greetingHandler::hello)
-      .build();
+  fun route(greetingHandler: GreetingHandler, employeeHandler: EmployeeHandler): RouterFunction<ServerResponse> = coRouter {
+        GET("/employee/{id}", accept(MediaType.APPLICATION_JSON), employeeHandler::findEmployeeById)
+        GET("/hello", greetingHandler::hello)
   }
 }
 
