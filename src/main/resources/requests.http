@@ -14,4 +14,3 @@ http://localhost:8080/logout
 curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1&firstCollection=2&secondCollection=3&secondCollection=4"
 curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1,2,3,4&secondCollection=3,4"
 
-curl -v -u user:password "http://localhost:8080/hello"

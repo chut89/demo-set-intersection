@@ -13,7 +13,7 @@ class OpenApiConfig(private val springdocProperties: SpringdocProperties) {
         println("Sprpingdoc version is ${springdocProperties.version}")
         println("spring-doc.swagger-ui.use-root-path is ${springdocProperties.swaggerUi?.useRootPath}")
         
-	    var paths = arrayOf("/api/**", "/employee/**", "/hello/**")
+	    var paths = arrayOf("/api/**")
 	    return GroupedOpenApi.builder().group("api")
 			    .addOpenApiCustomizer{ openApi -> openApi.info(Info().title("Demo Set Intersection API").version(springdocProperties.version)) }
 			    .pathsToMatch(*paths)

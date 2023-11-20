@@ -28,8 +28,6 @@ class SecurityConfig {
             httpBasic {}            
             authorizeExchange {
                 authorize("/api/setintersection/**", hasAuthority("ROLE_USER"))
-                authorize("/hello", permitAll)
-                authorize("/employee/**", permitAll)
                 authorize("/**", permitAll)                            
             }
             csrf {

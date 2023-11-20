@@ -11,6 +11,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 class SetIntersectionService {
     private val logger = KotlinLogging.logger {}
     
+    // TODO: consider returning Flow<Object> in which the last element is computation time in String
     fun computeIntersection(firstList: List<Int>, secondList: List<Int>): Pair<Set<Int>, String> {
         logger.info{"Computation starts!"}
         //if (first.isNotEmpty() && first is java.util.Set<*> && first is kotlin.collections.Set<*>) 
