@@ -35,13 +35,13 @@ class SetIntersectionRouter {
                 description = "Two sets in form of kotlin Pair",
                 content = [Content(
                     mediaType = "application/json",
-                    schema = Schema(implementation = Pair::class, example="Pair([1, 2, 3], [2, 3, 4])"),
+                    schema = Schema(example="{ \"first\":[1, 2, 3], \"second\":[2, 3, 4] }"),
                 )]
           ),
           responses = [ 
               ApiResponse(responseCode = "200", description = "Successful computation", content = [Content(
                   mediaType = "application/json",
-                  schema = Schema(implementation = Pair::class, example = "Pair([1, 2, 3, 4, 5], 135 ms)"),
+                  schema = Schema(example = "{ \"first\":[1, 2, 3, 4, 5], \"second\": 135ms }"),
               )]),
               ApiResponse(responseCode = "400", description = "Bad request, check for example encoding, escape of the two sets as parameters")
           ]      
@@ -49,20 +49,37 @@ class SetIntersectionRouter {
         RouterOperation(path = "/api/setintersection/simple", operation = Operation(operationId = "setintersectionGet", summary = "Computes intersection of two sets " +
        "when they are small in size where the URI does not exceeds 8kB (2048 characters)", description = "Returns matching elements of the two sets", tags = [ "Set Intersection simple" ],
             parameters = [
-                Parameter(`in` = ParameterIn.QUERY, description = "First input collection"),
-                Parameter(`in` = ParameterIn.QUERY, description = "Second input collection")
+                Parameter(`in` = ParameterIn.QUERY, name = "firstCollection", description = "First input collection"),
+                Parameter(`in` = ParameterIn.QUERY, name = "secondCollection", description = "Second input collection")
             ],
             responses = [ 
-                ApiResponse(responseCode = "200", description = "a successful greeting message"),
-                ApiResponse(responseCode = "404", description = "not found message")  
+                ApiResponse(responseCode = "200", description = "Successful computation", content = [Content(
+                  mediaType = "application/json",
+                  schema = Schema(implementation = Pair::class, example = "{ \"first\":[1, 2, 3, 4, 5], \"second\": 135ms}"),
+                )]),  
             ]
+      )),
+      RouterOperation(path = "/api/randomlist", operation = Operation(operationId = "randomlist", summary = "Returns a randomly generated list of integers", description = 
+        "Returns a randomly generated list of integers given specified size", tags = [ "Random List" ],
+        parameters = [ Parameter(`in` = ParameterIn.QUERY, name = "size", description = "Size of a wish list") ],
+        responses = [
+            ApiResponse(responseCode = "200", description = "successfully generated list of Integers", content = [Content(
+                  mediaType = "application/json",
+                  schema = Schema(example = "[1, 2, 3, 4, 5]"),
+                )]),  
+        ]
       ))
     )    
-    fun route(setIntersectionRequestHandler: SetIntersectionRequestHandler): RouterFunction<ServerResponse> = coRouter {
-        "/api/setintersection".nest {
-            POST("/complex", accept(MediaType.APPLICATION_JSON), setIntersectionRequestHandler::setIntersection)
-            GET("/simple", setIntersectionRequestHandler::setIntersectionDefault)
-        }
+    fun route(setIntersectionRequestHandler: SetIntersectionRequestHandler): RouterFunction<ServerResponse> {
+        return coRouter{
+            "/api/setintersection".nest {
+                POST("/complex", accept(MediaType.APPLICATION_JSON), setIntersectionRequestHandler::setIntersection)
+                GET("/simple", setIntersectionRequestHandler::setIntersectionDefault)
+            }
+          }.and(coRouter {
+            GET("/api/randomlist", setIntersectionRequestHandler::getRandomIntegerList)
+          })
+            
     }
 }
 

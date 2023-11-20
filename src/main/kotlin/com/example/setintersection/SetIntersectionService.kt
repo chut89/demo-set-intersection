@@ -3,25 +3,32 @@ package com.example.setintersection
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.TimeSource
+import kotlin.random.Random
 
 import org.springframework.stereotype.Service
 import io.github.oshai.kotlinlogging.KotlinLogging
+
+import java.util.stream.IntStream
 
 @Service
 class SetIntersectionService {
     private val logger = KotlinLogging.logger {}
     
+    val MIN = 0
+    val MAX = 1000
+    
     // TODO: consider returning Flow<Object> in which the last element is computation time in String
     fun computeIntersection(firstList: List<Int>, secondList: List<Int>): Pair<Set<Int>, String> {
+        assert(secondList.size <= firstList.size)
         logger.info{"Computation starts!"}
-        //if (first.isNotEmpty() && first is java.util.Set<*> && first is kotlin.collections.Set<*>) 
-        //    return setOf(5,4,3,2,1)
-        //val innerSet: Set<Int> = if (first.size <= second.size) first else second
-        //val outerSet: Set<Int> = if (first.size <= second.size) second else first
-        val secondSet = secondList.toHashSet()
-        
+        if (firstList.isEmpty() || secondList.isEmpty()) {
+            return Pair(setOf(), "0 us")
+        }
+
         val timeSource = TimeSource.Monotonic
         val markBefore = timeSource.markNow()
+        
+        val secondSet = secondList.toHashSet()
         
         var result: Set<Int> = emptySet()
         for (candidate in firstList.toSet()) {
@@ -32,10 +39,14 @@ class SetIntersectionService {
         }
         
         val markAfter = timeSource.markNow()
-        result.forEach{ element -> logger.info{"$element, "}}
+        //result.forEach{ element -> logger.debug{"$element, "}}
         
         logger.info{"Computation ends!"}
-        logger.debug{"duration=${markAfter - markBefore}"}
+        logger.debug{"duration=${markAfter - markBefore}, there are ${result.size} elements in common"}
         return Pair(result, (markAfter - markBefore).toString())
+    }
+    
+    fun getRandomIntegerList(size: Long): List<Int> {
+        return IntStream.generate{ Math.abs(Random.nextInt(MIN, MAX)) }.limit(size).boxed().toList()
     }
 }

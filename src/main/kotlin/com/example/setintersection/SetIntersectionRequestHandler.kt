@@ -20,8 +20,12 @@ class SetIntersectionRequestHandler(private val setIntersectionService: SetInter
         val (firstCollection, secondCollection) = 
             request.body(BodyExtractors.toMono(Pair::class.java)).awaitSingle() 
                 as Pair<List<Int>, List<Int> >
+
+        val innerList: List<Int> = if (firstCollection.size <= secondCollection.size) firstCollection else secondCollection
+        val outerList: List<Int> = if (firstCollection.size <= secondCollection.size) secondCollection else firstCollection
+                        
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)        
-                .bodyValueAndAwait(setIntersectionService.computeIntersection(firstCollection, secondCollection))
+                .bodyValueAndAwait(setIntersectionService.computeIntersection(outerList, innerList))
     }
     
     suspend fun setIntersectionDefault(request: ServerRequest): ServerResponse {
@@ -34,11 +38,24 @@ class SetIntersectionRequestHandler(private val setIntersectionService: SetInter
         val firstCollection = request.queryParam("firstCollection")?.get()?.split(",")?.stream()?.map{ it.toInt(10) }?.toList()
         val secondCollection = request.queryParam("secondCollection")?.get()?.split(",")?.stream()?.map{ it.toInt(10) }?.toList()
         
-        if (firstCollection == null || firstCollection.isEmpty() || secondCollection == null || secondCollection.isEmpty()) {
+        if (firstCollection == null || secondCollection == null) {
             return ServerResponse.badRequest().buildAndAwait()
         }
         
+        val innerList: List<Int> = if (firstCollection.size <= secondCollection.size) firstCollection else secondCollection
+        val outerList: List<Int> = if (firstCollection.size <= secondCollection.size) secondCollection else firstCollection
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-                .bodyValueAndAwait(setIntersectionService.computeIntersection(firstCollection, secondCollection))
+                .bodyValueAndAwait(setIntersectionService.computeIntersection(outerList, innerList))
+    }
+    
+    suspend fun getRandomIntegerList(request: ServerRequest): ServerResponse {
+        val size: Long? = request.queryParam("size")?.get()?.toLong()
+        
+        if (size == null || size < 0) {
+            return ServerResponse.badRequest().buildAndAwait()        
+        }
+        
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .bodyValueAndAwait(setIntersectionService.getRandomIntegerList(size))
     }
 }
