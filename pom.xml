@@ -46,8 +46,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>        
-        </dependency>        
+        </dependency-->        
         <dependency>
+            <!-- FIXME with this dependency slf4j complains that it failed to load class StaticLoggerBinder -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
@@ -58,7 +59,13 @@
                     <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency-->
+        </dependency>
+        <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <scope>test</scope>
+          <version>5.10.1</version>
+        </dependency>        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -74,6 +81,12 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot.version}</version>            
         </dependency>
+        <!-- Our security mechanism is naive so this dependency pretty much superfluous -->
+        <!--dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>6.2.0</version>            
+        </dependency-->        
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-core</artifactId>
@@ -93,13 +106,14 @@
             <groupId>io.projectreactor.kotlin</groupId>
             <artifactId>reactor-kotlin-extensions</artifactId>
             <version>1.2.2</version>
-        </dependency>        
+        </dependency-->        
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
+            <version>3.6.0</version>            
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
             <version>2.2.0</version>
