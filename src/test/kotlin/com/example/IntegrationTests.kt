@@ -38,7 +38,11 @@ class IntegrationTests {
     
     @BeforeEach
     fun setup() {
-        webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:$port/").build()
+        webTestClient = WebTestClient
+                        .bindToServer()
+                        .baseUrl("http://localhost:$port/")
+                        .defaultHeader("Authorization", "Basic ${defaultBase64EncodedCredential()}")            
+                        .build()
     }
             
 	@Test
@@ -54,7 +58,6 @@ class IntegrationTests {
                 .path("/api/setintersection/simple")
                     .queryParam("firstCollection", "1,2,3,4")
                         .queryParam("secondCollection", "3,4").build() }
-          .header("Authorization", "Basic ${defaultBase64EncodedCredential()}")
           .accept(MediaType.APPLICATION_JSON)
           .exchange()
           // and use the dedicated DSL to test assertions against the response
@@ -67,7 +70,6 @@ class IntegrationTests {
                 .path("/api/setintersection/simple")
                     .queryParam("firstCollection", "1,2,3,4")
                         .queryParam("secondCollection", "3,4").build() }
-          .header("Authorization", "Basic ${defaultBase64EncodedCredential()}")
           .accept(MediaType.APPLICATION_JSON)
           .exchange()
           // and use the dedicated DSL to test assertions against the response
@@ -81,7 +83,6 @@ class IntegrationTests {
         webTestClient
           // Create a POST request to test an endpoint        
           .post().uri("/api/setintersection/complex")
-          .header("Authorization", "Basic ${defaultBase64EncodedCredential()}")
           .accept(MediaType.APPLICATION_JSON)
           .bodyValue(Pair(listOf(1, 2, 3, 4), listOf(3, 4)))
           .exchange()
@@ -92,7 +93,6 @@ class IntegrationTests {
         webTestClient
           // Create a POST request to test an endpoint        
           .post().uri("/api/setintersection/complex")
-          .header("Authorization", "Basic ${defaultBase64EncodedCredential()}")
           .accept(MediaType.APPLICATION_JSON)
           .bodyValue(Pair(listOf(1, 2, 3, 4), listOf(3, 4)))
           .exchange()
@@ -103,7 +103,11 @@ class IntegrationTests {
     
     @Test
     fun `Assert Unauthorized when request is provided without identity credential`() {
-        webTestClient
+        WebTestClient
+          .bindToServer()
+          .baseUrl("http://localhost:$port/")
+          // without provided Base64 encoded credential in header          
+          .build()
           .post().uri("/api/setintersection/complex")
           .accept(MediaType.APPLICATION_JSON)
           .bodyValue(Pair(listOf(1, 2, 3, 4), listOf(3, 4)))
@@ -114,7 +118,11 @@ class IntegrationTests {
 
     @Test
     fun `Assert Unauthorized with invalid password`() {
-        webTestClient
+        WebTestClient
+          .bindToServer()
+          .baseUrl("http://localhost:$port/")
+          // without provided Base64 encoded credential in header
+          .build()    
           .post().uri("/api/setintersection/complex")
           .accept(MediaType.APPLICATION_JSON)
           .bodyValue(Pair(listOf(1, 2, 3, 4), listOf(3, 4)))
