@@ -66,6 +66,7 @@ class IntegrationTests {
                        .jsonPath("$['first'].length()").isEqualTo(2)
                        .jsonPath("$['first'][0]").isEqualTo(3)
                        .jsonPath("$['first'][1]").isEqualTo(4)
+                       .jsonPath("$['second']").isNotEmpty()
     }
     
     @Test
@@ -83,6 +84,7 @@ class IntegrationTests {
                        .jsonPath("$['first'].length()").isEqualTo(2) 
                        .jsonPath("$['first'][0]").isEqualTo(3)
                        .jsonPath("$['first'][1]").isEqualTo(4)           
+                       .jsonPath("$['second']").isNotEmpty()                       
     }
 
     @Test
@@ -106,6 +108,7 @@ class IntegrationTests {
           .expectBody()
                        .jsonPath("$['first'].length()").isEqualTo(4) // to verify the intersection has 4 elements
                        .jsonPath("$['first'][?(@ in [12,78,599,204])]").isNotEmpty() // to verify its elements
+                       .jsonPath("$['second']").isNotEmpty()
     }
     
     @Test
