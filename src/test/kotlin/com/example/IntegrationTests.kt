@@ -62,19 +62,10 @@ class IntegrationTests {
           .exchange()
           // and use the dedicated DSL to test assertions against the response
           .expectStatus().isOk()
-          .expectBody().jsonPath("$['first'][0]").isEqualTo(3)
-
-      webTestClient
-          // Create a GET request to test an endpoint
-          .get().uri{ builder -> builder
-                .path("/api/setintersection/simple")
-                    .queryParam("firstCollection", "1,2,3,4")
-                        .queryParam("secondCollection", "3,4").build() }
-          .accept(MediaType.APPLICATION_JSON)
-          .exchange()
-          // and use the dedicated DSL to test assertions against the response
-          .expectStatus().isOk()
-          .expectBody().jsonPath("$['first'][1]").isEqualTo(4)
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2)
+                       .jsonPath("$['first'][0]").isEqualTo(3)
+                       .jsonPath("$['first'][1]").isEqualTo(4)
     }
     
     @Test
@@ -88,17 +79,10 @@ class IntegrationTests {
           .exchange()
           // and use the dedicated DSL to test assertions against the response
           .expectStatus().isOk()
-          .expectBody().jsonPath("$['first'][0]").isEqualTo(3)
-
-        webTestClient
-          // Create a POST request to test an endpoint        
-          .post().uri("/api/setintersection/complex")
-          .accept(MediaType.APPLICATION_JSON)
-          .bodyValue(Pair(listOf(1, 2, 3, 4), listOf(3, 4)))
-          .exchange()
-          // and use the dedicated DSL to test assertions against the response
-          .expectStatus().isOk()
-          .expectBody().jsonPath("$['first'][1]").isEqualTo(4)           
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2) 
+                       .jsonPath("$['first'][0]").isEqualTo(3)
+                       .jsonPath("$['first'][1]").isEqualTo(4)           
     }
     
     @Test
