@@ -105,7 +105,7 @@ class IntegrationTests {
           .expectStatus().isOk()
           .expectBody()
                        .jsonPath("$['first'].length()").isEqualTo(4) // to verify the intersection has 4 elements
-                       .jsonPath("$['first'][?(@ in [4,12,78,599,204])]").isNotEmpty() // to verify its elements
+                       .jsonPath("$['first'][?(@ in [12,78,599,204])]").isNotEmpty() // to verify its elements
     }
     
     @Test
