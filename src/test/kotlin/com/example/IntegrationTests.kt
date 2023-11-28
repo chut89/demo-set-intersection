@@ -84,6 +84,29 @@ class IntegrationTests {
                        .jsonPath("$['first'][0]").isEqualTo(3)
                        .jsonPath("$['first'][1]").isEqualTo(4)           
     }
+
+    @Test
+    @Suppress("UNCHECKED_CAST")
+    fun `Assert set intersection is returned with heavy loaded input`() {          
+      webTestClient
+          // Create a POST request to test an endpoint
+          .post()
+          .uri("/api/setintersection/complex")
+          .bodyValue(
+            Pair(listOf(55,534,12,349,473,78,26,374,599,75,719,40,204,
+                    149,234,102,845,182,223,592,195,623,43,496,969,747,751,414,546,239,170,942,635,643),
+                listOf(363,616,800,411,585,883,803,4,605,257,252,169,249,533,517,801,699,895,368,5,595,890,373,
+                      141,267,129,220,562,854,219,812,599,768,212,888,452,798,315,859,558,12,700,640,204,913,893,706,480,383,740,
+                    463,573,776,466,110,49,648,699,338,824,477,715,443,482,955,435,388,45,66,829,907,517,328,91,67,394,495,363,957,834,369,830,
+                    410,472,572,347,518,66,953,77,33,292,362,608,598,359,944,78,21,936)))
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          // and use the dedicated DSL to test assertions against the response
+          .expectStatus().isOk()
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(4) // to verify the intersection has 4 elements
+                       .jsonPath("$['first'][?(@ in [4,12,78,599,204])]").isNotEmpty() // to verify its elements
+    }
     
     @Test
     fun `Assert Unauthorized when request is provided without identity credential`() {
