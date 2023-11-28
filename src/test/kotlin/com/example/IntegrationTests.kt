@@ -1,14 +1,17 @@
+// TODO: test generate random numbers and processing time
 package com.example
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
 
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import java.net.URI
@@ -26,7 +29,17 @@ import org.assertj.core.api.Assertions.assertThat
     SecurityConfig::class // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
 ])
 @EnableAutoConfiguration
-class IntegrationTests(@Autowired var webTestClient: WebTestClient) {
+class IntegrationTests {
+
+    lateinit var webTestClient: WebTestClient
+    
+    @LocalServerPort
+    lateinit var port: Integer
+    
+    @BeforeEach
+    fun setup() {
+        webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:$port/").build()
+    }
             
 	@Test
 	fun contextLoads() {
