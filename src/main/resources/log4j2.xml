@@ -12,6 +12,8 @@
     <Logger name="com.example.setintersection" level="debug">
       <!--AppenderRef ref="Console"/-->
     </Logger>
+    <!--Logger name="reactor.util.Loggers" level="debug">
+    </Logger-->
     <Root level="error">
       <AppenderRef ref="Console"/>
     </Root> 
