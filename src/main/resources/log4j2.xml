@@ -9,7 +9,7 @@
   </Appenders>
 
   <Loggers>
-    <Logger name="com.example.setintersection" level="debug">
+    <Logger name="com.example" level="debug">
       <!--AppenderRef ref="Console"/-->
     </Logger>
     <!--Logger name="reactor.util.Loggers" level="debug">

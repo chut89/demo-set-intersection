@@ -39,7 +39,7 @@
         </dependency>                    
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
             <version>${spring-boot.version}</version>        
         </dependency>        
         <dependency>
@@ -100,11 +100,36 @@
             <artifactId>log4j-1.2-api</artifactId>
             <version>2.22.0</version>
           </dependency-->
-        <dependency>
-            <groupId>io.github.oshai</groupId>
-            <artifactId>kotlin-logging-jvm</artifactId>
-            <version>5.1.0</version>
-        </dependency>
+           <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-core</artifactId>
+                <version>${kotlinx-coroutines.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-reactor</artifactId>
+                <version>${kotlinx-coroutines.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>3.6.0</version>
+            </dependency>        
+            <dependency>
+                <groupId>io.github.oshai</groupId>
+                <artifactId>kotlin-logging-jvm</artifactId>
+                <version>5.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring-boot.version}</version>            
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>2.2.0</version>
+            </dependency>                
     </dependencies>
 
     <build>

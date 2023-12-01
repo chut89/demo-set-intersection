@@ -9,7 +9,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 //import org.apache.logging.log4j.Logger
 import org.slf4j.LoggerFactory
 
+import com.example.config.SpringdocProperties
+
 @SpringBootApplication
+@EnableConfigurationProperties(SpringdocProperties::class)
 class DemoSetIntersectionApplication
 
 fun main(args: Array<String>) {
