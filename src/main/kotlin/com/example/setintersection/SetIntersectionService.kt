@@ -10,9 +10,13 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 import java.util.stream.IntStream
 
+import org.slf4j.LoggerFactory
+
 @Service
 class SetIntersectionService {
-    private val logger = KotlinLogging.logger {}
+    //private val logger = KotlinLogging.logger {}
+    
+    private val logger = LoggerFactory.getLogger(SetIntersectionService::class.java)
     
     val MIN = 0
     val MAX = 1000
@@ -20,7 +24,7 @@ class SetIntersectionService {
     // TODO: consider returning Flow<Object> in which the last element is computation time in String
     fun computeIntersection(firstList: List<Int>, secondList: List<Int>): Pair<Set<Int>, String> {
         assert(secondList.size <= firstList.size)
-        logger.info{"Computation starts!"}
+        logger.info("Computation starts!")
         if (firstList.isEmpty() || secondList.isEmpty()) {
             return Pair(setOf(), "0 us")
         }
@@ -41,8 +45,8 @@ class SetIntersectionService {
         val markAfter = timeSource.markNow()
         //result.forEach{ element -> logger.debug{"$element, "}}
         
-        logger.info{"Computation ends!"}
-        logger.debug{"duration=${markAfter - markBefore}, there are ${result.size} elements in common"}
+        logger.info("Computation ends!")
+        logger.debug("duration=${markAfter - markBefore}, there are ${result.size} elements in common")
         return Pair(result, (markAfter - markBefore).toString())
     }
     
