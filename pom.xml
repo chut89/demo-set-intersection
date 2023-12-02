@@ -29,7 +29,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring-boot.version}</version>
-            <!-- exclude one of the two: apache logging or logback so that only one slf4j provider will be found -->
+            <!-- exclude logback so that only one slf4j provider will be found -->
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -46,23 +46,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>        
-        </dependency-->        
+        </dependency>        
         <dependency>
-            <!-- FIXME with this dependency slf4j complains that it failed to load class StaticLoggerBinder -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-reactor-netty</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency-->
+        <dependency>    
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
             <scope>test</scope>
-            <exclusions>
+            <!--exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
                     <artifactId>junit</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            </exclusions-->
         </dependency>
         <dependency>
           <groupId>org.junit.jupiter</groupId>
@@ -76,15 +76,21 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency-->
+        <!-- Place this before reload4j so that spring boot will pick apache log4j -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
             <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>2.0.9</version>
         </dependency>        
         <dependency>
-            <groupId>io.github.oshai</groupId>
-            <artifactId>kotlin-logging-jvm</artifactId>
-            <version>5.1.0</version>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api-kotlin</artifactId>
+          <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

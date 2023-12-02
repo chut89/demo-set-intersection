@@ -6,13 +6,13 @@ import kotlin.time.TimeSource
 import kotlin.random.Random
 
 import org.springframework.stereotype.Service
-import io.github.oshai.kotlinlogging.KotlinLogging
+import org.apache.logging.log4j.kotlin.Logging
 
 import java.util.stream.IntStream
 
 @Service
 class SetIntersectionService {
-    private val logger = KotlinLogging.logger {}
+    companion object : Logging
     
     val MIN = 0
     val MAX = 1000
