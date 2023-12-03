@@ -1,0 +1,4 @@
+springdoc:
+  version: 0.0.1
+  swagger-ui:
+    use-root-path: true

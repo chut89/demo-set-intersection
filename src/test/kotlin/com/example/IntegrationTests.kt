@@ -1,4 +1,3 @@
-// TODO: test generate random numbers and processing time
 package com.example
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -56,9 +55,8 @@ class IntegrationTests {
           // Create a GET request to test an endpoint
           .get().uri{ builder -> builder
                 .path("/api/setintersection/simple")
-                    .queryParam("firstCollection", "1,2,3,4")
-                        .queryParam("secondCollection", "3,4").build() }
-          .accept(MediaType.APPLICATION_JSON)
+                    .queryParam("firstCollection", listOf(1,2,3,4).toStringAsQueryParam())
+                        .queryParam("secondCollection", listOf(3,4).toStringAsQueryParam()).build() }
           .exchange()
           // and use the dedicated DSL to test assertions against the response
           .expectStatus().isOk()
@@ -112,6 +110,63 @@ class IntegrationTests {
     }
     
     @Test
+    fun `Assert that random controller returns list of integer`() {
+        val bodyContentSpec = webTestClient
+          .get().uri{ builder -> builder
+                 .path("/api/randomlist")
+                 .queryParam("size", "5").build() }
+          .exchange()
+          .expectStatus().isOk()
+          .expectBody()
+                    .jsonPath("$.length()").isEqualTo(5)
+                    
+        IntRange(0, 4).forEach{ bodyContentSpec.jsonPath("$[${it}]").isNumber() }
+    }
+    
+    @Test
+    fun `Test random then SetIntersection`() {
+        val firstRandomList: MutableList<Int> = mutableListOf()
+        var bodyContentSpec = webTestClient
+          .get().uri{ builder -> builder
+                 .path("/api/randomlist")
+                 .queryParam("size", "5").build() }
+          .exchange()
+          .expectStatus().isOk()          
+          .expectBody()
+                    .jsonPath("$.length()").isEqualTo(5)
+                    
+        IntRange(0, 4).forEach{ bodyContentSpec.jsonPath("$[${it}]").value({ num: Int -> firstRandomList.add(num) }) }
+        
+        val secondRandomList: MutableList<Int> = mutableListOf()
+        bodyContentSpec = webTestClient
+          .get().uri{ builder -> builder
+                 .path("/api/randomlist")
+                 .queryParam("size", "15").build() }
+          .exchange()
+          .expectStatus().isOk()          
+          .expectBody()
+                    .jsonPath("$.length()").isEqualTo(15)
+                    
+        IntRange(0, 14).forEach{ bodyContentSpec.jsonPath("$[${it}]").value({ num: Int -> secondRandomList.add(num) }) }
+
+        webTestClient
+          .get().uri{ builder -> builder
+                 .path("/api/setintersection/simple")
+                 .queryParam("firstCollection", firstRandomList.toStringAsQueryParam())
+                 .queryParam("secondCollection", secondRandomList.toStringAsQueryParam())
+                 .build() }
+          .exchange()
+          .expectStatus().isOk()
+          
+         webTestClient
+             .post()
+             .uri("/api/setintersection/complex")      
+             .bodyValue(Pair(firstRandomList, secondRandomList))
+             .exchange()
+             .expectStatus().isOk()             
+    }
+        
+    @Test
     fun `Assert Unauthorized when request is provided without identity credential`() {
         WebTestClient
           .bindToServer()
@@ -142,5 +197,8 @@ class IntegrationTests {
     }
     
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
-
+    
+    private fun List<Int>.toStringAsQueryParam(): String {
+        return this.toString().replace(" ", "").replace("[", "").replace("]", "")
+    }
 }
