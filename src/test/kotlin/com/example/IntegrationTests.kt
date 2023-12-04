@@ -22,7 +22,6 @@ import com.example.setintersection.SetIntersectionRouter
 import com.example.setintersection.SetIntersectionService
 import com.example.config.SecurityConfig
 
-import org.assertj.core.api.Assertions.assertThat
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = [ SetIntersectionRequestHandler::class, SetIntersectionRouter::class, SetIntersectionService::class, 
     SecurityConfig::class // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
