@@ -135,7 +135,10 @@ class IntegrationTests {
           .expectBody()
                     .jsonPath("$.length()").isEqualTo(5)
                     
-        IntRange(0, 4).forEach{ bodyContentSpec.jsonPath("$[${it}]").value({ num: Int -> firstRandomList.add(num) }) }
+        IntRange(0, 4).forEach { 
+            bodyContentSpec.jsonPath("$[${it}]").isNumber()
+                           .jsonPath("$[${it}]").value({ num: Int -> firstRandomList.add(num) }) 
+        }
         
         val secondRandomList: MutableList<Int> = mutableListOf()
         bodyContentSpec = webTestClient
@@ -147,7 +150,10 @@ class IntegrationTests {
           .expectBody()
                     .jsonPath("$.length()").isEqualTo(15)
                     
-        IntRange(0, 14).forEach{ bodyContentSpec.jsonPath("$[${it}]").value({ num: Int -> secondRandomList.add(num) }) }
+        IntRange(0, 14).forEach { 
+            bodyContentSpec.jsonPath("$[${it}]").isNumber()
+                           .jsonPath("$[${it}]").value({ num: Int -> secondRandomList.add(num) }) 
+        }
 
         webTestClient
           .get().uri{ builder -> builder
