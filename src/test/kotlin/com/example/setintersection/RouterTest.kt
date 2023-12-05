@@ -2,6 +2,7 @@ package com.example.setintersection
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.mock.mockito.MockBean
 
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -11,6 +12,11 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.server.RouterFunction
 import org.springframework.web.reactive.function.server.ServerResponse
 
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.util.Base64
@@ -19,9 +25,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
-import com.ninjasquad.springmockk.MockkBean
-//import io.mockk.every
-import io.mockk.*
+
 
 import com.example.setintersection.SetIntersectionRequestHandler
 import com.example.setintersection.SetIntersectionRouter
@@ -29,7 +33,7 @@ import com.example.setintersection.SetIntersectionService
 import com.example.config.SecurityConfig
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [ SetIntersectionRequestHandler::class, SetIntersectionRouter::class,
+@ContextConfiguration(classes = [ SetIntersectionRequestHandler::class, SetIntersectionRouter::class, SetIntersectionService::class,
     SecurityConfig::class // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
 ])
 //@WebAppConfiguration
@@ -38,8 +42,8 @@ class RouterTest {
     //@Autowired
     var webTestClient: WebTestClient? = null
     
-    @MockkBean
-    var serviceMock: SetIntersectionService? = null
+    //@MockBean
+    var serviceMock: SetIntersectionService = mock<SetIntersectionService>()
     
     @Autowired
     lateinit var route: RouterFunction<ServerResponse>
@@ -59,8 +63,7 @@ class RouterTest {
 	
 	@Test
 	fun testSetIntersectionSimple() {
-	    every { serviceMock?.computeIntersection(any(), any()) } returns Pair(setOf(3, 4), "123us")
-	    //Mockito.when(serviceMock?.computeIntersection(Mockito.any(), Mockito.any()))?.thenReturn(Pair(setOf(3, 4), "123us"))
+	    whenever(serviceMock?.computeIntersection(any(), any()))?.thenReturn(Pair(setOf(3, 4), "123us"))
 	
 	    webTestClient
 	            ?.get()?.uri{ builder -> builder
