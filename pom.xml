@@ -89,6 +89,16 @@
             <artifactId>mockito-kotlin</artifactId>
             <version>5.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.10</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <version>1.14.10</version>
+        </dependency>
         <!-- Place this before reload4j so that spring boot will pick apache log4j -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -274,10 +284,6 @@
                     <excludes>
                         <exclude>**/*IntegrationTests</exclude>
                     </excludes>
-                    <!-- If you don't configure system property as such, you'll need to pass it in CLI like mvn -D...=...-->
-                    <systemPropertyVariables>
-                        <net.bytebuddy.experimental>true</net.bytebuddy.experimental>
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>	            
             <plugin>
