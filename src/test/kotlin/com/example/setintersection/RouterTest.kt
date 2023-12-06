@@ -1,5 +1,6 @@
 package com.example.setintersection
 
+import org.springframework.http.MediaType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -75,6 +76,23 @@ class RouterTest {
                        ?.jsonPath("$['first'][0]")?.isEqualTo(3)
                        ?.jsonPath("$['first'][1]")?.isEqualTo(4)
                        ?.jsonPath("$['second']")?.isEqualTo("123us")
+	}
+	
+	@Test
+	fun testSetIntersectionComplex() {
+	    whenever(serviceMock.computeIntersection(any(), any())).thenReturn(Pair(setOf(3, 4), "123us"))
+	
+	    webTestClient
+	            ?.post()?.uri("/api/setintersection/complex")
+          ?.accept(MediaType.APPLICATION_JSON)
+          ?.bodyValue(Pair(listOf(9999, 9999, 9999, 9999), listOf(9999, 9999)))
+          ?.exchange()
+          ?.expectStatus()?.isOk()
+          ?.expectBody()
+                       ?.jsonPath("$['first'].length()")?.isEqualTo(2)
+                       ?.jsonPath("$['first'][0]")?.isEqualTo(3)
+                       ?.jsonPath("$['first'][1]")?.isEqualTo(4)
+                       ?.jsonPath("$['second']")?.isEqualTo("123us")	
 	}
 	
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
