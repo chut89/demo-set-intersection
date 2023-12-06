@@ -40,7 +40,7 @@ import com.example.config.SecurityConfig
 @EnableAutoConfiguration
 class RouterTest {
 
-    var webTestClient: WebTestClient? = null
+    lateinit var webTestClient: WebTestClient
     
     // @MockBean or @Autowired works equally well
     @MockBean
@@ -65,17 +65,17 @@ class RouterTest {
 	    whenever(serviceMock.computeIntersection(any(), any())).thenReturn(Pair(setOf(3, 4), "123us"))
 	
 	    webTestClient
-	            ?.get()?.uri{ builder -> builder
-                ?.path("/api/setintersection/simple")
-                    ?.queryParam("firstCollection", listOf(9999,9999,9999,9999).toStringAsQueryParam())
-                        ?.queryParam("secondCollection", listOf(9999, 9999).toStringAsQueryParam())?.build() }
-          ?.exchange()
-          ?.expectStatus()?.isOk()
-          ?.expectBody()
-                       ?.jsonPath("$['first'].length()")?.isEqualTo(2)
-                       ?.jsonPath("$['first'][0]")?.isEqualTo(3)
-                       ?.jsonPath("$['first'][1]")?.isEqualTo(4)
-                       ?.jsonPath("$['second']")?.isEqualTo("123us")
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", listOf(9999,9999,9999,9999).toStringAsQueryParam())
+                        .queryParam("secondCollection", listOf(9999, 9999).toStringAsQueryParam()).build() }
+          .exchange()
+          .expectStatus().isOk()
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2)
+                       .jsonPath("$['first'][0]").isEqualTo(3)
+                       .jsonPath("$['first'][1]").isEqualTo(4)
+                       .jsonPath("$['second']").isEqualTo("123us")
 	}
 	
 	@Test
@@ -83,16 +83,16 @@ class RouterTest {
 	    whenever(serviceMock.computeIntersection(any(), any())).thenReturn(Pair(setOf(3, 4), "123us"))
 	
 	    webTestClient
-	            ?.post()?.uri("/api/setintersection/complex")
-          ?.accept(MediaType.APPLICATION_JSON)
-          ?.bodyValue(Pair(listOf(9999, 9999, 9999, 9999), listOf(9999, 9999)))
-          ?.exchange()
-          ?.expectStatus()?.isOk()
-          ?.expectBody()
-                       ?.jsonPath("$['first'].length()")?.isEqualTo(2)
-                       ?.jsonPath("$['first'][0]")?.isEqualTo(3)
-                       ?.jsonPath("$['first'][1]")?.isEqualTo(4)
-                       ?.jsonPath("$['second']")?.isEqualTo("123us")	
+	            .post().uri("/api/setintersection/complex")
+          .accept(MediaType.APPLICATION_JSON)
+          .bodyValue(Pair(listOf(9999, 9999, 9999, 9999), listOf(9999, 9999)))
+          .exchange()
+          .expectStatus().isOk()
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2)
+                       .jsonPath("$['first'][0]").isEqualTo(3)
+                       .jsonPath("$['first'][1]").isEqualTo(4)
+                       .jsonPath("$['second']").isEqualTo("123us")	
 	}
 	
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
