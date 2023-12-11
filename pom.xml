@@ -239,16 +239,16 @@
                     <target>${java.version}</target>
                 </configuration>
                 <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <!-- Replacing default-compile as it is treated specially by maven >
                     <execution>
                         <id>default-compile</id>
                         <phase>none</phase>
-                    </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    </execution-->
+                    <!-- Replacing default-testCompile as it is treated specially by maven >
                     <execution>
                         <id>default-testCompile</id>
                         <phase>none</phase>
-                    </execution>
+                    </execution-->
                     <execution>
                         <id>java-compile</id>
                         <phase>compile</phase>
