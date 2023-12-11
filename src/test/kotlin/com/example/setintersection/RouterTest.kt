@@ -94,6 +94,23 @@ class RouterTest {
                        .jsonPath("$['first'][1]").isEqualTo(6)
                        .jsonPath("$['second']").isEqualTo("987us")	
 	}
+	
+	@Test
+	fun testRandomGeneration() {
+	    whenever(serviceMock.getRandomIntegerList(eq(9999L))).thenReturn(listOf(1, 2, 3, 4, 5))
+
+	    val bodyContentSpec = webTestClient
+	        .get().uri{ uriBuilder -> uriBuilder
+	            .path("/api/randomlist")
+	            .queryParam("size", 9999L)
+	            .build() }
+	        .exchange()
+	        .expectStatus().isOk()
+	        .expectBody()
+	            .jsonPath("$.length()").isEqualTo(5)
+
+        IntRange(0, 4).forEach{ bodyContentSpec.jsonPath("$[${it}]").isEqualTo(it + 1) }
+	}
 
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
 
