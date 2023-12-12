@@ -27,13 +27,11 @@ import com.example.config.OpenApiConfig
 import com.example.config.SpringdocProperties
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@EnableConfigurationProperties(SpringdocProperties::class)
 @ContextConfiguration(classes = [ SetIntersectionRequestHandler::class, SetIntersectionRouter::class, SetIntersectionService::class, 
-    SecurityConfig::class // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
-    //OpenApiConfig::class, SpringdocProperties::class
+    SecurityConfig::class, // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
+    OpenApiConfig::class, SpringdocProperties::class
 ])
 @EnableAutoConfiguration
-//@TestPropertySource("classpath:/application.properties", properties = ["springdoc.version=0.0.1", "springdoc.swagger-ui.use-root-path=true"]) 
 class IntegrationTests {
 
     lateinit var webTestClient: WebTestClient
@@ -260,7 +258,6 @@ class IntegrationTests {
           .expectStatus().isUnauthorized()
     }
     
-    @org.junit.jupiter.api.Disabled
     @Test
     fun `Assert that Springdoc has been generated`() {
         WebTestClient
