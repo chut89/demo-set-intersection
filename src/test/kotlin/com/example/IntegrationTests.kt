@@ -1,6 +1,7 @@
 package com.example
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
 
 import org.junit.jupiter.api.BeforeEach
@@ -21,12 +23,17 @@ import com.example.setintersection.SetIntersectionRequestHandler
 import com.example.setintersection.SetIntersectionRouter
 import com.example.setintersection.SetIntersectionService
 import com.example.config.SecurityConfig
+import com.example.config.OpenApiConfig
+import com.example.config.SpringdocProperties
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@EnableConfigurationProperties(SpringdocProperties::class)
 @ContextConfiguration(classes = [ SetIntersectionRequestHandler::class, SetIntersectionRouter::class, SetIntersectionService::class, 
     SecurityConfig::class // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
+    //OpenApiConfig::class, SpringdocProperties::class
 ])
 @EnableAutoConfiguration
+//@TestPropertySource("classpath:/application.properties", properties = ["springdoc.version=0.0.1", "springdoc.swagger-ui.use-root-path=true"]) 
 class IntegrationTests {
 
     lateinit var webTestClient: WebTestClient
@@ -46,6 +53,38 @@ class IntegrationTests {
 	@Test
 	fun contextLoads() {
 	}
+
+    @Test
+    fun `Test setintersection simple case when first collection is null`() {
+      webTestClient
+          .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", listOf(1,2,3,4))
+                        .queryParam("secondCollection", listOf(3,4).toStringAsQueryParam()).build() }
+          .exchange()
+          .expectStatus().isOk()    
+          .expectBody()
+                       .jsonPath("$['first']").isEmpty()          
+    }
+    
+    @Test
+    fun `Test setintersection simple case with bad request parameter`() {
+      webTestClient
+          .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                        // firstCollection is missing here
+                        .queryParam("secondCollection", listOf(3,4).toStringAsQueryParam()).build() }
+          .exchange()
+          .expectStatus().isBadRequest()
+
+      webTestClient
+          .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                        // secondCollection is missing here
+                        .queryParam("firstCollection", listOf(3,4).toStringAsQueryParam()).build() }
+          .exchange()
+          .expectStatus().isBadRequest()
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST")
@@ -106,6 +145,26 @@ class IntegrationTests {
                        .jsonPath("$['first'].length()").isEqualTo(4) // to verify the intersection has 4 elements
                        .jsonPath("$['first'][?(@ in [12,78,599,204])]").isNotEmpty() // to verify its elements
                        .jsonPath("$['second']").isNotEmpty()
+    }
+    
+    @Test
+    fun `Test random list generator with bad request parameter`() {
+        webTestClient
+                 .get().uri{ builder -> builder
+                 .path("/api/randomlist")
+                 .queryParam("size", "-5").build() }
+          .exchange()
+          .expectStatus().isBadRequest()
+    }
+
+    @Test
+    fun `Test random list generator without request parameter`() {
+        webTestClient
+                 .get().uri{ builder -> builder
+                 .path("/api/randomlist")
+                 .build() }
+          .exchange()
+          .expectStatus().isBadRequest()
     }
     
     @Test
@@ -199,6 +258,19 @@ class IntegrationTests {
           .exchange()
           // and use the dedicated DSL to test assertions against the response
           .expectStatus().isUnauthorized()
+    }
+    
+    @org.junit.jupiter.api.Disabled
+    @Test
+    fun `Assert that Springdoc has been generated`() {
+        WebTestClient
+          .bindToServer()
+          .baseUrl("http://localhost:$port/")
+          .build()
+          .get()
+          .uri("/swagger-ui.html")
+          .exchange()
+          .expectStatus().isFound() // it will be redirected to localhost:$port/...
     }
     
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
