@@ -267,7 +267,7 @@ class IntegrationTests {
           .get()
           .uri("/swagger-ui.html")
           .exchange()
-          .expectStatus().isFound() // it will be redirected to localhost:$port/...
+          .expectStatus().isFound() // it will be redirected to localhost:$port/webjars/swagger-ui/index.html
     }
     
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
