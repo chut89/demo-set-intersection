@@ -92,6 +92,20 @@ class RouterTest {
                        .jsonPath("$['first'][1]").isEqualTo(6)
                        .jsonPath("$['second']").isEqualTo("987us")	
 	}
+
+	@org.junit.jupiter.api.Disabled	
+	@Test
+	fun testSetIntersectionWithBadRequest() {
+	    val emptyList: List<Int> = listOf()
+	    webTestClient
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", emptyList.toStringAsQueryParam())
+                        .queryParam("secondCollection", listOf(9995, 9994).toStringAsQueryParam()).build() }
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          .expectStatus().isBadRequest()	    
+	}
 	
 	@Test
 	fun testRandomGeneration() {
@@ -108,6 +122,28 @@ class RouterTest {
 	            .jsonPath("$.length()").isEqualTo(5)
 
         IntRange(0, 4).forEach{ bodyContentSpec.jsonPath("$[${it}]").isEqualTo(it + 1) }
+	}
+	
+	@Test
+	fun testRandomGenerationWithBadRequest() {
+	    webTestClient
+	        .get().uri{ uriBuilder -> uriBuilder
+	            .path("/api/randomlist")
+	            .queryParam("size", -5)
+	            .build() }
+	        .exchange()
+	        .expectStatus().isBadRequest()
+	}
+
+	@Test
+	fun testRandomGenerationWithEmptyParam() {
+	    webTestClient
+	        .get().uri{ uriBuilder -> uriBuilder
+	            .path("/api/randomlist")
+	            //queryParam has not been set
+	            .build() }
+	        .exchange()
+	        .expectStatus().isBadRequest()
 	}
 
     private fun defaultBase64EncodedCredential(): String = Base64.getEncoder().encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
