@@ -17,6 +17,14 @@ sudo apt-get -y install git
 ```
 git clone https://github.com/chut89/demo-set-intersection
 ```
+### Build and integration test ###
+cd to project directory
+```shellscript
+cd demo-set-intersection/
+mvn verify
+```
+Surefire and Failsafe reports can be found in `target/site/jacoco/index.html` and `target/site/jacoco-it/index.html` respectively
+
 ### Build and run backend ###
 cd to project directory
 ```shellscript
