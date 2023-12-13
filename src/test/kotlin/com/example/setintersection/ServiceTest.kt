@@ -30,18 +30,27 @@ class ServiceTest {
 	    Assertions.assertEquals(setOf(3, 4), intersection)
 	    Assertions.assertTrue(java.lang.Double.parseDouble(processingTime.substring(0, processingTime.lastIndexOf("s") - 2)) > 0.0, // processingTime can be xxxms or xxxus
 	        "Processing time should be greater than 0!!!")
+
+	    val (otherIntersection, otherProcessingTime) = testee.computeIntersection(listOf(1, 2, 3), listOf(2, 3, 4))
+	    Assertions.assertEquals(setOf(2, 3), otherIntersection)
+	    Assertions.assertTrue(java.lang.Double.parseDouble(otherProcessingTime.substring(0, otherProcessingTime.lastIndexOf("s") - 2)) > 0.0, // processingTime can be xxxms or xxxus
+	        "Processing time should be greater than 0!!!")
 	}
 	
 	@Test
 	fun `Test computation of set intersection when input list is empty`() {
-	    var expected: Pair<Set<Int>, String> = Pair(setOf(), "0 us")
+	    val expected: Pair<Set<Int>, String> = Pair(setOf(), "0 us")
 	    Assertions.assertEquals(expected, testee.computeIntersection(listOf(5, 6), listOf()))
 	}
 	
 	@Test
-	fun `Assert that AssertionError is thrown`() {
+	fun `Assert that AssertionError is thrown if parameters are not passed in right order`() {
 	    Assertions.assertThrows(java.lang.AssertionError::class.java, { 
 	        testee.computeIntersection(listOf(1, 2), listOf(1, 2, 3)) 
+	    })
+	    val expected: Pair<Set<Int>, String> = Pair(setOf(), "0 us")
+	    Assertions.assertThrows(java.lang.AssertionError::class.java, { 
+	        Assertions.assertEquals(expected, testee.computeIntersection(listOf(), listOf(5, 6)))
 	    })
 	}
 	

@@ -15,7 +15,8 @@ import org.springframework.web.reactive.function.server.buildAndAwait
 
 @Component
 class SetIntersectionRequestHandler(private val setIntersectionService: SetIntersectionService) {
-
+    companion object : org.apache.logging.log4j.kotlin.Logging
+    
     @Suppress("UNCHECKED_CAST")
     suspend fun setIntersection(request: ServerRequest): ServerResponse {
         val (firstCollection, secondCollection) = 
@@ -36,8 +37,8 @@ class SetIntersectionRequestHandler(private val setIntersectionService: SetInter
         val secondCollection: List<Int>? = request.queryParams().get("secondCollection")?.stream()?.map{ it.toInt(10) }?.toList()
         We enforce the queryParams to be of format firstCollection=1,2&secondCollection=2,3
         */
-        val firstCollection = request.queryParam("firstCollection").orElse(null)?.split(",")?.stream()?.map{ it.toInt(10) }?.toList()
-        val secondCollection = request.queryParam("secondCollection").orElse(null)?.split(",")?.stream()?.map{ it.toInt(10) }?.toList()
+        var firstCollection: List<Int>? = request.queryParam("firstCollection").orElse(null)?.toIntegerList()
+        val secondCollection = request.queryParam("secondCollection").orElse(null)?.toIntegerList()
         
         if (firstCollection == null || secondCollection == null) {
             return ServerResponse.badRequest().buildAndAwait()
@@ -58,5 +59,14 @@ class SetIntersectionRequestHandler(private val setIntersectionService: SetInter
         
         return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
                 .bodyValueAndAwait(setIntersectionService.getRandomIntegerList(size))
+    }
+    
+    private fun String.toIntegerList(): List<Int>? {
+        try {
+            return this.split(",").stream().map{ it.toInt(10) }.toList()
+        } catch (e: NumberFormatException) {
+            logger.error { "Exception occurred parsing Integer value from request parameter" }
+            return null;
+        }
     }
 }

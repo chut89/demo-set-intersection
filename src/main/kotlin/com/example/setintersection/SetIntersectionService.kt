@@ -21,7 +21,7 @@ class SetIntersectionService {
     fun computeIntersection(firstList: List<Int>, secondList: List<Int>): Pair<Set<Int>, String> {
         assert(secondList.size <= firstList.size)
         logger.info{"Computation starts!"}
-        if (firstList.isEmpty() || secondList.isEmpty()) {
+        if (secondList.isEmpty()) {
             return Pair(setOf(), "0 us")
         }
 

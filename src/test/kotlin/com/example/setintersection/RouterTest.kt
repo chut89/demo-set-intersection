@@ -74,6 +74,19 @@ class RouterTest {
                        .jsonPath("$['first'][0]").isEqualTo(3)
                        .jsonPath("$['first'][1]").isEqualTo(4)
                        .jsonPath("$['second']").isEqualTo("123us")
+
+	    webTestClient
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", listOf(9995, 9994).toStringAsQueryParam())
+                        .queryParam("secondCollection", listOf(9999, 9998, 9997, 9996).toStringAsQueryParam()).build() }
+          .exchange()
+          .expectStatus().isOk()
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2)
+                       .jsonPath("$['first'][0]").isEqualTo(3)
+                       .jsonPath("$['first'][1]").isEqualTo(4)
+                       .jsonPath("$['second']").isEqualTo("123us")
 	}
 	
 	@Test
@@ -91,9 +104,20 @@ class RouterTest {
                        .jsonPath("$['first'][0]").isEqualTo(5)
                        .jsonPath("$['first'][1]").isEqualTo(6)
                        .jsonPath("$['second']").isEqualTo("987us")	
+
+	    webTestClient
+	            .post().uri("/api/setintersection/complex")
+          .accept(MediaType.APPLICATION_JSON)
+          .bodyValue(Pair(listOf(1111, 2222), listOf(9999, 8888, 7777, 6666)))
+          .exchange()
+          .expectStatus().isOk()
+          .expectBody()
+                       .jsonPath("$['first'].length()").isEqualTo(2)
+                       .jsonPath("$['first'][0]").isEqualTo(5)
+                       .jsonPath("$['first'][1]").isEqualTo(6)
+                       .jsonPath("$['second']").isEqualTo("987us")
 	}
 
-	@org.junit.jupiter.api.Disabled	
 	@Test
 	fun testSetIntersectionWithBadRequest() {
 	    val emptyList: List<Int> = listOf()
@@ -105,7 +129,38 @@ class RouterTest {
           .accept(MediaType.APPLICATION_JSON)
           .exchange()
           .expectStatus().isBadRequest()	    
+
+	    webTestClient
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", listOf(9995, 9994))
+                        .queryParam("secondCollection", emptyList.toStringAsQueryParam()).build() }
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          .expectStatus().isBadRequest()	    
 	}
+	
+	@Test
+	fun testSetIntersectionWithEmptyFirstCollection() {
+	    webTestClient
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    //firstCollection is intentionally not passed
+                        .queryParam("secondCollection", listOf(9995, 9994).toStringAsQueryParam()).build() }
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          .expectStatus().isBadRequest()	    
+
+	    webTestClient
+	            .get().uri{ builder -> builder
+                .path("/api/setintersection/simple")
+                    .queryParam("firstCollection", listOf(9995, 9994))
+                        //secondCollection is intentionally not passed
+                        .build() }
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          .expectStatus().isBadRequest()	   
+	}	
 	
 	@Test
 	fun testRandomGeneration() {
