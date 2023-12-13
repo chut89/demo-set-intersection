@@ -171,6 +171,11 @@
             <plugin>
               <groupId>org.springframework.boot</groupId>
               <artifactId>spring-boot-maven-plugin</artifactId>
+              <configuration>
+                <profiles>
+                  <profile>local</profile>
+                </profiles>
+              </configuration>
               <version>${spring-boot.version}</version>
             </plugin>        
             <plugin>
@@ -404,12 +409,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-    <profiles>
+    <!--profiles>
       <profile>
-        <id>dev</id>
+        <id>local</id>
         <activation>
           <activeByDefault>true</activeByDefault>
         </activation>
       </profile>
-    </profiles>    
+    </profiles-->    
 </project>
