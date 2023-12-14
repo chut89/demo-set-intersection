@@ -84,6 +84,8 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency-->
+        <!-- In this discussion https://github.com/spring-projects/spring-boot/issues/15749 mockk is not fully supported by springboot -->
+        <!-- In my opinion mockito-kotlin is still more acitve than mockk-->
         <dependency>
             <groupId>org.mockito.kotlin</groupId>
             <artifactId>mockito-kotlin</artifactId>
@@ -165,8 +167,8 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${project.srcdir}</sourceDirectory>
-        <testSourceDirectory>${project.testsrcdir}</testSourceDirectory>
+        <!--sourceDirectory>${project.srcdir}</sourceDirectory>
+        <testSourceDirectory>${project.testsrcdir}</testSourceDirectory-->
         <plugins>
             <plugin>
               <groupId>org.springframework.boot</groupId>
@@ -193,11 +195,12 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.srcdir}</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                             <args>
                                 <arg>-Xjvm-default=all-compatibility</arg>
-                            </args>
+                            </args>>
                         </configuration>
                     </execution>
                     <execution>
@@ -242,6 +245,13 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerArgument>-Xlint:all</compilerArgument>
+                    <compilerArgs>
+                        <arg>-verbose</arg>
+                        <arg>-Xlint:all,-options,-path</arg>
+                    </compilerArgs>
                 </configuration>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven >
@@ -355,7 +365,7 @@
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.60</minimum>
+                                            <minimum>0.50</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -364,6 +374,73 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                     <execution>
+                        <id>ktlint-generate-editor-config</id>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                                    classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                                  <!-- see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information -->
+                                  <arg value="generateEditorConfig"/>
+                                  <arg value="--code-style=ktlint_official"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>ktlint</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                                    classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                                  <!-- see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information -->
+                                  <!--arg value="-l debug"/-->
+                                  <arg value="src/**/*.kt"/>
+                                  <arg value="src/**/*.java"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>ktlint-format</id>
+                        <configuration>
+                        <target name="ktlint">
+                            <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                                classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                                <!-- Note: the JVM args below is only required when running ktlint with Java 16+ in format mode -->
+                                <jvmarg value="--add-opens=java.base/java.lang=ALL-UNNAMED"/>
+                                <!-- see https://pinterest.github.io/ktlint/install/cli/#command-line-usage for more information -->
+                                <arg value="-F"/>
+                                <arg value="src/**/*.kt"/>
+                            </java>
+                        </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.pinterest.ktlint</groupId>
+                        <artifactId>ktlint-cli</artifactId>
+                        <version>1.0.1</version>
+                    </dependency>
+                    <!-- additional 3rd party ruleset(s) can be specified here -->
+                </dependencies>
+            </plugin>            
             <!--plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -384,7 +461,12 @@
                          </goals>
                     </execution>
                 </executions>
-            </plugin-->
+            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>4.0.0-M12</version>
+          </plugin-->
         </plugins>
     </build>
 

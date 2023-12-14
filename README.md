@@ -17,12 +17,27 @@ sudo apt-get -y install git
 ```
 git clone https://github.com/chut89/demo-set-intersection
 ```
+
+### (Optional) Install and generate kotlin linter rule sets ###
+- Download ktlint at https://pinterest.github.io/ktlint/dev-snapshot/install/cli/#download-and-verification
+- Generate .editorconfig file which scaffold basic rule sets
+```shellscript
+ktlint generateEditorConfig --code-style=ktlint_official >> ./.editorconfig
+```
+- Details on how to add ktlint-maven-plugin to your POM can be found at https://pinterest.github.io/ktlint/dev-snapshot/install/integrations/
+
 ### Build and integration test ###
+To generate .editorconfig file which scaffold basic rule sets run, if it has been done previously you can skip this step
+```shellscript
+mvn org.apache.maven.plugins:maven-antrun-plugin:3.1.0:run@ktlint-generate-editor-config
+```
+Then copy the content from stdout to .editorconfig
 cd to project directory
 ```shellscript
 cd demo-set-intersection/
 mvn verify
 ```
+Ktlint report will be output to stdin
 Surefire and Failsafe reports can be found in `target/site/jacoco/index.html` and `target/site/jacoco-it/index.html` respectively
 
 ### Build and run backend ###
