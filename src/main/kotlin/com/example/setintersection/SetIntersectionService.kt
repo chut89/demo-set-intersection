@@ -8,13 +8,12 @@ import kotlin.time.TimeSource
 
 @Service
 class SetIntersectionService {
-    companion object Minmax {
+    companion object {
         val logger: Any = logger()
-        val MIN = 0
-        val MAX = 1000
+        const val MIN = 0
+        const val MAX = 1000
     }
 
-    // TODO: consider returning Flow<Object> in which the last element is computation time in String
     fun computeIntersection(
         firstList: List<Int>,
         secondList: List<Int>,

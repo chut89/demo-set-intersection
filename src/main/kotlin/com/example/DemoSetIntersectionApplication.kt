@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(SpringdocProperties::class)
 class DemoSetIntersectionApplication
 
+@Suppress("SpreadOperator")
 fun main(args: Array<String>) {
     SpringApplication(DemoSetIntersectionApplication::class.java).apply { setBannerMode(Banner.Mode.CONSOLE) }.run(*args)
 }

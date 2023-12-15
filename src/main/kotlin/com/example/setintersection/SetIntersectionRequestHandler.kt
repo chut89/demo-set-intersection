@@ -1,6 +1,7 @@
 package com.example.setintersection
 
 import kotlinx.coroutines.reactor.awaitSingle
+import org.apache.logging.log4j.kotlin.logger
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyExtractors
@@ -11,7 +12,10 @@ import org.springframework.web.reactive.function.server.buildAndAwait
 
 @Component
 class SetIntersectionRequestHandler(private val setIntersectionService: SetIntersectionService) {
-    companion object : org.apache.logging.log4j.kotlin.Logging
+    companion object {
+        val logger: Any = logger()
+        const val RADIX_TEN = 10
+    }
 
     @Suppress("UNCHECKED_CAST")
     suspend fun setIntersection(request: ServerRequest): ServerResponse {
@@ -59,7 +63,7 @@ class SetIntersectionRequestHandler(private val setIntersectionService: SetInter
 
     private fun String.toIntegerList(): List<Int>? {
         try {
-            return this.split(",").stream().map { it.toInt(10) }.toList()
+            return this.split(",").stream().map { it.toInt(RADIX_TEN) }.toList()
         } catch (e: NumberFormatException) {
             logger.error { "Exception occurred parsing Integer value from request parameter" }
             return null

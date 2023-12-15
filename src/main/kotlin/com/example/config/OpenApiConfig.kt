@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class OpenApiConfig(private val springdocProperties: SpringdocProperties) {
     @Bean
+    @Suppress("SpreadOperator")
     fun demoSetIntersectionOpenApi(): GroupedOpenApi {
         println("Sprpingdoc version is ${springdocProperties.version}")
         println("spring-doc.swagger-ui.use-root-path is ${springdocProperties.swaggerUi?.useRootPath}")
