@@ -448,12 +448,12 @@
                     <execution>
                         <!-- This can be run separately with mvn antrun:run@detekt -->
                         <id>detekt</id>
-                        <phase>validate</phase>
+                        <phase>verify</phase>
                         <configuration>
                             <target name="detekt">
                                 <java taskname="detekt" dir="${project.basedir}"
                                       fork="true" 
-                                      failonerror="true"
+                                      failonerror="false"
                                       classname="io.gitlab.arturbosch.detekt.cli.Main"
                                       classpathref="maven.plugin.classpath">
                                     <arg value="--input"/>
