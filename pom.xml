@@ -246,7 +246,6 @@
                     <target>${java.version}</target>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
-                    <compilerArgument>-Xlint:all</compilerArgument>
                     <compilerArgs>
                         <arg>-verbose</arg>
                         <arg>-Xlint:all,-options,-path</arg>
@@ -276,13 +275,6 @@
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
-                        <!--configuration>
-                            <compilerArgs>
-                                <arg>-verbose</arg>
-                                <arg>-Xlint:all,-options,-path</arg>
-                                <arg>-Dnet.bytebuddy.experimental</arg>                                
-                            </compilerArgs>                            
-                        </configuration-->
                     </execution>
                 </executions>
             </plugin>
@@ -364,7 +356,7 @@
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.50</minimum>
+                                            <minimum>0.60</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
