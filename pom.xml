@@ -237,7 +237,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!-- TODO: PMD rules-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -406,6 +405,7 @@
                                   <!--arg value="-l debug"/-->
                                   <arg value="src/**/*.kt"/>
                                   <!--arg value="src/**/*.java"/-->
+                                  <arg value="--reporter=plain,output=${project.basedir}/target/ktlint-reports/ktlint.txt" />  
                                 </java>
                             </target>
                         </configuration>
@@ -431,12 +431,41 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <!-- This can be run separately with mvn antrun:run@detekt -->
+                        <id>detekt</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target name="detekt">
+                                <java taskname="detekt" dir="${project.basedir}"
+                                      fork="true" 
+                                      failonerror="true"
+                                      classname="io.gitlab.arturbosch.detekt.cli.Main"
+                                      classpathref="maven.plugin.classpath">
+                                    <arg value="--input"/>
+                                    <arg value="${project.basedir}/src/main/kotlin"/>
+                                    <arg value="--excludes"/>
+                                    <arg value="**/special/package/internal/**"/>
+                                    <arg value="--report"/>
+                                    <arg value="xml:${project.basedir}/target/detekt-reports/detekt.xml"/>
+                                    <!--arg value="baseline"/>
+                                    <arg value="${project.basedir}/target/detekt-reports/baseline.xml"/-->
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
                 </executions>
                 <dependencies>
                     <dependency>
                         <groupId>com.pinterest.ktlint</groupId>
                         <artifactId>ktlint-cli</artifactId>
                         <version>1.0.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.gitlab.arturbosch.detekt</groupId>
+                        <artifactId>detekt-cli</artifactId>
+                        <version>1.23.4</version>
                     </dependency>
                     <!-- additional 3rd party ruleset(s) can be specified here -->
                 </dependencies>
