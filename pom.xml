@@ -431,6 +431,20 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                     <execution>
+                        <id>detekt-generate-config</id>
+                        <configuration>
+                            <target name="detekt">
+                                <java taskname="detekt" dir="${project.basedir}" fork="true" failonerror="true"
+                                    classpathref="maven.plugin.classpath" classname="io.gitlab.arturbosch.detekt.cli.Main">
+                                  <arg value="--generate-config"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <!-- This can be run separately with mvn antrun:run@detekt -->
                         <id>detekt</id>
@@ -448,6 +462,8 @@
                                     <arg value="**/special/package/internal/**"/>
                                     <arg value="--report"/>
                                     <arg value="xml:${project.basedir}/target/detekt-reports/detekt.xml"/>
+                                    <arg value="--config"/>
+                                    <arg value="${project.basedir}/detekt.yml"/>
                                     <!--arg value="baseline"/>
                                     <arg value="${project.basedir}/target/detekt-reports/baseline.xml"/-->
                                 </java>

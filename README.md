@@ -26,10 +26,18 @@ ktlint generateEditorConfig --code-style=ktlint_official >> ./.editorconfig
 ```
 - Details on how to add ktlint-maven-plugin to your POM can be found at https://pinterest.github.io/ktlint/dev-snapshot/install/integrations/
 
-### Build and integration test ###
-To generate .editorconfig file which scaffold basic rule sets run, if it has been done previously you can skip this step
+### (Optional) Install and generate detekt ###
 ```shellscript
-mvn org.apache.maven.plugins:maven-antrun-plugin:3.1.0:run@ktlint-generate-editor-config
+curl -sSLO https://github.com/detekt/detekt/releases/download/v1.23.3/detekt-cli-1.23.3.zip
+unzip detekt-cli-1.23.3.zip
+./detekt-cli-1.23.3/bin/detekt-cli --generate-config
+```
+
+### Build and integration test ###
+(Optional) To generate .editorconfig file which scaffold basic rule sets run and detekt which detects potential code smells, if it has been done previously you can skip this step
+```shellscript
+mvn antrun:run@ktlint-generate-editor-config
+mvn antrun:run@detekt-generate-config
 ```
 Then copy the content from stdout to .editorconfig
 cd to project directory
