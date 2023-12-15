@@ -167,8 +167,9 @@
     </dependencies>
 
     <build>
-        <!--sourceDirectory>${project.srcdir}</sourceDirectory>
-        <testSourceDirectory>${project.testsrcdir}</testSourceDirectory-->
+        <!-- Please don't remove this or jacoco will NOT be able to find source files -->
+        <sourceDirectory>${project.srcdir}</sourceDirectory>
+        <testSourceDirectory>${project.testsrcdir}</testSourceDirectory>
         <plugins>
             <plugin>
               <groupId>org.springframework.boot</groupId>
@@ -195,7 +196,7 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.srcdir}</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <!--sourceDir>${project.basedir}/src/main/java</sourceDir-->
                             </sourceDirs>
                             <jvmTarget>${java.version}</jvmTarget>
                             <args>
