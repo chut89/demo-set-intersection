@@ -34,12 +34,16 @@ unzip detekt-cli-1.23.3.zip
 ```
 
 ### Build and integration test ###
-(Optional) To generate .editorconfig file which scaffold basic rule sets run and detekt which detects potential code smells, if it has been done previously you can skip this step
+- (Optional) To generate .editorconfig file which scaffold basic rule sets run and detekt which detects potential code smells, if it has been done previously you can skip this step
 ```shellscript
 mvn antrun:run@ktlint-generate-editor-config
-mvn antrun:run@detekt-generate-config
 ```
 Then copy the content from stdout to .editorconfig
+```shellscript
+mvn antrun:run@detekt-generate-config
+```
+Then detekt.yml is ready
+- (Mandatory) Validate, compile, test and integration test
 cd to project directory
 ```shellscript
 cd demo-set-intersection/
