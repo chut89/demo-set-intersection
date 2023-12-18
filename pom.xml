@@ -123,11 +123,11 @@
             <version>${spring-boot.version}</version>            
         </dependency>
         <!-- Our security mechanism is naive so this dependency pretty much superfluous -->
-        <!--dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>6.2.0</version>            
-        </dependency-->        
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-core</artifactId>
