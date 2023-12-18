@@ -1,34 +1,17 @@
 package com.example
 
-import com.example.config.OpenApiConfig
-import com.example.config.SecurityConfig
-import com.example.config.SpringdocProperties
-import com.example.setintersection.SetIntersectionRequestHandler
-import com.example.setintersection.SetIntersectionRouter
-import com.example.setintersection.SetIntersectionService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(
-    classes = [
-        SetIntersectionRequestHandler::class,
-        SetIntersectionRouter::class,
-        SetIntersectionService::class,
-        SecurityConfig::class, // without this SecurityFilterChain cannot be loaded and therefore every page is prohibited!!!
-        OpenApiConfig::class,
-        SpringdocProperties::class,
-    ],
-)
-@EnableAutoConfiguration
+@AutoConfigureWebTestClient
 class IntegrationTests {
     lateinit var webTestClient: WebTestClient
 
