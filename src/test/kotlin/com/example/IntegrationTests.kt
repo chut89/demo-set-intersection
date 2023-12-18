@@ -7,8 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
-import java.nio.charset.StandardCharsets
-import java.util.Base64
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -24,7 +23,8 @@ class IntegrationTests {
             WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:$port/")
-                .defaultHeader("Authorization", "Basic ${defaultBase64EncodedCredential()}")
+                // This adds a Basic authentication header to the request
+                .filter(basicAuthentication("user", "password"))
                 .build()
     }
 
@@ -313,11 +313,6 @@ class IntegrationTests {
             .exchange()
             .expectStatus().isFound() // it will be redirected to localhost:$port/webjars/swagger-ui/index.html
     }
-
-    private fun defaultBase64EncodedCredential(): String =
-        Base64
-            .getEncoder()
-            .encodeToString("user:password".toByteArray(StandardCharsets.UTF_8))
 
     private fun List<Int>.toStringAsQueryParam(): String {
         return this.toString().replace(" ", "").replace("[", "").replace("]", "")
