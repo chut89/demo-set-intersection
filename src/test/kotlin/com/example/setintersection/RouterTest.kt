@@ -4,13 +4,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -25,22 +21,15 @@ import org.springframework.web.reactive.function.server.ServerResponse
         SetIntersectionRouter::class,
     ],
 )
-@EnableAutoConfiguration
 class RouterTest {
     lateinit var webTestClient: WebTestClient
 
-    // @MockBean or @Autowired works equally well
+    // With @MockBean we don't have to create TestConfiguration
     @MockBean
     lateinit var serviceMock: SetIntersectionService
 
     @Autowired
     lateinit var route: RouterFunction<ServerResponse>
-
-    @TestConfiguration
-    class TestOverridenConfiguration {
-        @Bean
-        fun mockSetIntersectionService(): SetIntersectionService = mock<SetIntersectionService>()
-    }
 
     @BeforeEach
     fun setup() {
