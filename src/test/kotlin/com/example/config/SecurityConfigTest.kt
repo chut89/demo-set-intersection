@@ -20,16 +20,16 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyValueAndAwait
 import org.springframework.web.reactive.function.server.coRouter
 
-@TestComponent
-class TestRequestHandler {
-    suspend fun test(request: ServerRequest): ServerResponse {
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
-            .bodyValueAndAwait("Authentication passed!")
-    }
-}
-
 @TestConfiguration
-class TestOverridenConfiguration {
+class TestOverridenConfigurationForSecurityConfigTest {
+    @TestComponent
+    class TestRequestHandler {
+        suspend fun test(request: ServerRequest): ServerResponse {
+            return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
+                .bodyValueAndAwait("Authentication passed!")
+        }
+    }
+
     @Bean
     fun route(testRequestHandler: TestRequestHandler): RouterFunction<ServerResponse> {
         return coRouter {
@@ -39,13 +39,14 @@ class TestOverridenConfiguration {
 }
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [TestRequestHandler::class, TestOverridenConfiguration::class, SecurityConfig::class])
+@ContextConfiguration(classes = [TestOverridenConfigurationForSecurityConfigTest::class, SecurityConfig::class])
 // Without this annotation, webHandler cannot be found!!!
 @org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 class SecurityConfigTest {
     @Autowired
     lateinit var context: ApplicationContext
 
+    // @Autowired is done automatically
     lateinit var rest: WebTestClient
 
     @BeforeEach

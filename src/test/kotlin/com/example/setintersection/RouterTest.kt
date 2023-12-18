@@ -22,6 +22,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
     ],
 )
 class RouterTest {
+    // @Autowired is done automatically
     lateinit var webTestClient: WebTestClient
 
     // With @MockBean we don't have to create TestConfiguration

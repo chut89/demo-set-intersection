@@ -122,7 +122,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot.version}</version>            
         </dependency>
-        <!-- Our security mechanism is naive so this dependency pretty much superfluous -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
