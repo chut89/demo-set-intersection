@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.context.TestComponent
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.ApplicationContext
@@ -41,7 +42,7 @@ class TestOverridenConfigurationForSecurityConfigTest {
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [TestOverridenConfigurationForSecurityConfigTest::class, SecurityConfig::class])
 // Without this annotation, webHandler cannot be found!!!
-@org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+@WebFluxTest
 class SecurityConfigTest {
     @Autowired
     lateinit var context: ApplicationContext
