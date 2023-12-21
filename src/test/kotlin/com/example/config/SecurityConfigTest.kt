@@ -47,7 +47,7 @@ class SecurityConfigTest {
     @Autowired
     lateinit var context: ApplicationContext
 
-    // @Autowired is done automatically
+    // @Autowired is not necessary because we initialise rest in @BeforeEach method
     lateinit var rest: WebTestClient
 
     @BeforeEach
