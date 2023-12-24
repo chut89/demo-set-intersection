@@ -511,7 +511,7 @@
         <kotlin.version>1.9.20</kotlin.version>
         <kotlinx-coroutines.version>1.7.3</kotlinx-coroutines.version>
         <java.version>20</java.version> 
-        <spring-boot.version>3.2.0</spring-boot.version>
+        <spring-boot.version>3.2.1</spring-boot.version>
         <!--r2dbc.version>1.0.0.RELEASE</r2dbc.version>
         <r2dbc-spi.version>1.0.0.RELEASE</r2dbc-spi.version>
         <h2-r2dbc.version>1.0.0.RELEASE</h2-r2dbc.version-->
