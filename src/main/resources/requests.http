@@ -16,5 +16,13 @@ http://localhost:8080/logout
 curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1&firstCollection=2&secondCollection=3&secondCollection=4"
 curl -v -u user:password "http://localhost:8080/api/setintersection/simple?firstCollection=1,2,3,4&secondCollection=3,4"
 
+curl -v -k -u user:password "https://localhost:8443/api/setintersection/simple?firstCollection=1,2,3,4&secondCollection=3,4"
+
+curl -v -k -u user:password \
+-H "X-XSRF-TOKEN: 4ded6adc-17b3-4324-bacc-bf34f50e54f7" \
+--cookie "JSESSIONID=A7F702DE5C1B35E1A2F38182DBF490FE;XSRF-TOKEN=4ded6adc-17b3-4324-bacc-bf34f50e54f7" \
+-H "Content-Type: application/json" -H "Accept: application/json" --data '{"first": [1,2,3,4], "second": [3,4]}' \
+"https://localhost:8443/api/setintersection/complex"
+
 curl -v -u user:password "http://localhost:8080/api/randomlist?size=5"
 

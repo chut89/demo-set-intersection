@@ -51,6 +51,15 @@ mvn verify
 ```
 Ktlint report will be output to stdin
 Surefire and Failsafe reports can be found in `target/site/jacoco/index.html` and `target/site/jacoco-it/index.html` respectively
+- At the moment securing our Rest apis with ssl is not tested
+
+### (Optional) Create self-signed certificates ###
+To secure communication between server and client using two-way (mutual) ssl we generate a key store for each of them
+```shellscript
+cd {projectdir.basedir}/src/main/resource
+mkdir -p certs
+keytool -genkeypair -alias springboot -keyalg RSA -keysize 4096 -storetype PKCS12 -keystore springboot.p12 -validity 3650 -storepass password
+```
 
 ### Build and run backend ###
 cd to project directory
@@ -60,6 +69,9 @@ mvn spring-boot:run
 ```
 If your machine has Apache Maven with other version than 3.9.5, there's no problem. You can overcome with Maven wrapper, the idea is borrowed from Gradle: detail in https://maven.apache.org/wrapper/
 
+### (Optional) Import client certificate into browser ###
+If we have generated key stores for server above and built the application with ssl activated then to make ssl work, we will want to import server certificate into browser. This will be done after the warning about unsecured connection pops up and we make an exception of localhost (server certificate will be imported)
+
 ### OpenAPI documentation ###
-OpenAPI definition can be found locally at http://localhost:8080/swagger-ui.html after backend has been built and started
+OpenAPI definition can be found locally at http://localhost:8080/swagger-ui.html (with local profile) or https://localhost:8443/swagger-ui.html (with ssl profile) after backend has been built and started
 
