@@ -1,0 +1,34 @@
+springdoc:
+  version: 0.0.1
+  swagger-ui:
+    use-root-path: true
+#spring:
+#  threads:
+#    virtual:
+#      enabled: true
+#  ssl:
+#    bundle:
+#      jks:
+#        web-server:
+#          key:
+#            alias: "servercert"
+#          keystore:
+#            location: "classpath:server.p12"
+#            password: "changeit"
+#            type: "PKCS12"
+#  server:
+#    ssl:
+#      bundle: “web-server”
+#      client-auth: NEED
+server:
+  ssl:
+    key-alias: "springboot"
+    key-password: "password"
+    key-store: "classpath:springboot.p12"
+    key-store-password: "password"
+    client-auth: NEED    
+    #trust store location
+    trust-store: "classpath:myTrustStore"
+    #trust store password
+    trust-store-password: "changeit"
+  port: 8443
