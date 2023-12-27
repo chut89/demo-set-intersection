@@ -177,6 +177,7 @@
               <configuration>
                 <profiles>
                   <profile>local</profile>
+                  <profile>ssl</profile>
                 </profiles>
               </configuration>
               <version>${spring-boot.version}</version>
