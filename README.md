@@ -38,36 +38,38 @@ unzip detekt-cli-1.23.3.zip
 ```shellscript
 mvn antrun:run@ktlint-generate-editor-config
 ```
-Then copy the content from stdout to .editorconfig
+Then copy the content from `stdout` to `.editorconfig`
 ```shellscript
 mvn antrun:run@detekt-generate-config
 ```
-Then detekt.yml is ready
+Then `detekt.yml` is ready
 - (Mandatory) Validate, compile, test and integration test
 cd to project directory
 ```shellscript
 cd demo-set-intersection/
 mvn verify
 ```
-Ktlint report will be output to stdin
+Ktlint report will be output to `stdin`
+<br/>
 Surefire and Failsafe reports can be found in `target/site/jacoco/index.html` and `target/site/jacoco-it/index.html` respectively
 - At the moment securing our Rest apis with ssl is not tested
 
 ### (Optional) Create self-signed certificates ###
-To secure communication between server and client using two-way (mutual) ssl we generate a key store for each of them
+To secure communication between server and client using one-way ssl we generate a key store for each of them
 ```shellscript
 cd {projectdir.basedir}/src/main/resource
-mkdir -p certs
-keytool -genkeypair -alias springboot -keyalg RSA -keysize 4096 -storetype PKCS12 -keystore springboot.p12 -validity 3650 -storepass password
+keytool -genkeypair -alias servercert -keyalg RSA -keysize 4096 -storetype PKCS12 -keystore server.p12 -validity 3650 -storepass changeit
 ```
 
 ### Build and run backend ###
 cd to project directory
 ```shellscript
 cd demo-set-intersection/
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles=[active_profile]
 ```
-If your machine has Apache Maven with other version than 3.9.5, there's no problem. You can overcome with Maven wrapper, the idea is borrowed from Gradle: detail in https://maven.apache.org/wrapper/
+where `active_profile` can be `local` or `ssl`, then an http (8080) or https (8443) default port will be loaded respectively.
+<br/>
+If your machine has Apache Maven with other version than 3.9.5, there's no problem. You can overcome with Maven wrapper, the idea is borrowed from Gradle, see detail in https://maven.apache.org/wrapper/
 
 ### (Optional) Import client certificate into browser ###
 If we have generated key stores for server above and built the application with ssl activated then to make ssl work, we will want to import server certificate into browser. This will be done after the warning about unsecured connection pops up and we make an exception of localhost (server certificate will be imported)
