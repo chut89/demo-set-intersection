@@ -126,6 +126,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>6.2.0</version>            
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
@@ -147,12 +148,12 @@
             <artifactId>reactor-kotlin-extensions</artifactId>
             <version>1.2.2</version>
         </dependency-->        
-        <dependency>
+        <!--dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
             <version>3.6.0</version>            
-        </dependency>
+        </dependency-->
         <!--dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
